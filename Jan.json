@@ -1,0 +1,29 @@
+{
+            "name": "Jan-2017",
+            "children": [
+                {
+                    "name": "heavily polluted",
+                    "size": 4000
+                },
+                {
+                    "name": "highly polluted",
+                    "size": 6000
+                },
+                {
+                    "name": "median polluted",
+                    "size": 1000
+                },
+                {
+                    "name": "slightly polluted",
+                    "size": 3000
+                },
+                {
+                    "name": "fine",
+                    "size": 9000
+                },
+                {
+                    "name": "good",
+                    "size": 8000
+                }
+            ]
+        }

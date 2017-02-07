@@ -1,0 +1,92 @@
+{
+    "name": "air-condition",
+    "children": [
+        {
+            "name": "Nov-2016",
+            "children": [
+                {
+                    "name": "heavily polluted",
+                    "size": 1000
+                },
+                {
+                    "name": "highly polluted",
+                    "size": 5000
+                },
+                {
+                    "name": "median polluted",
+                    "size": 4000
+                },
+                {
+                    "name": "slightly polluted",
+                    "size": 7000
+                },
+                {
+                    "name": "fine",
+                    "size": 10000
+                },
+                {
+                    "name": "good",
+                    "size": 3000
+                }
+            ]
+        },
+        {
+            "name": "Dec-2016",
+            "children": [
+                {
+                    "name": "heavily polluted",
+                    "size": 4000
+                },
+                {
+                    "name": "highly polluted",
+                    "size": 7000
+                },
+                {
+                    "name": "median polluted",
+                    "size": 3000
+                },
+                {
+                    "name": "slightly polluted",
+                    "size": 5000
+                },
+                {
+                    "name": "fine",
+                    "size": 8000
+                },
+                {
+                    "name": "good",
+                    "size": 4000
+                }
+            ]
+        },
+        {
+            "name": "Jan-2017",
+            "children": [
+                {
+                    "name": "heavily polluted",
+                    "size": 4000
+                },
+                {
+                    "name": "highly polluted",
+                    "size": 6000
+                },
+                {
+                    "name": "median polluted",
+                    "size": 1000
+                },
+                {
+                    "name": "slightly polluted",
+                    "size": 3000
+                },
+                {
+                    "name": "fine",
+                    "size": 9000
+                },
+                {
+                    "name": "good",
+                    "size": 8000
+                }
+            ]
+        }
+    ]
+}
