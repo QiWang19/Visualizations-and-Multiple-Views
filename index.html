@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+.bar {
+
+}
+
+
+.axis--x path {
+  display: none;
+}
+
+circle {
+  fill-opacity: .45;
+  stroke: rgb(31, 119, 180);
+  stroke-width: 1px;
+}
+
+.leaf circle {
+  
+  fill-opacity: 1;
+}
+
+text {
+  font: 10px sans-serif;
+  text-anchor: middle;
+}
+
+
+body { font: 12px Arial;}
+
+path { 
+    stroke: black;
+    stroke-width: 2;
+    fill: none;
+}
+
+.axis path,
+.axis line {
+    fill: none;
+    stroke: grey;
+    stroke-width: 1;
+    shape-rendering: crispEdges;
+}
+
+</style>
+<svg id = "bar" x="0" width="500" height="300"></svg>
+<svg id = "cir" x="800" width="400" height="400"></svg>
+<svg id = "line" width="960" height="300"></svg>
+<script src="http://d3js.org/d3.v4.min.js"></script>
+<script>
+      var dispatch = d3.dispatch("load", "statechange", "choose", "highlight");
+      var isNov = 0;
+      var isDec = 0;
+      var isJan = 0;
+      //bar chart
+      function bar(num){
+        var svg1 = d3.select("#bar"),
+            margin = {top: 30, right: 30, bottom: 30, left: 60},
+            width = +svg1.attr("width") - margin.left - margin.right,
+            height = +svg1.attr("height") - margin.top - margin.bottom;
+
+        var x = d3.scaleBand().rangeRound([0, width]).padding(0.1),
+            y = d3.scaleLinear().rangeRound([height, 0]);
+
+        var g = svg1.append("g")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+        d3.csv("bardata.csv", function(d) {
+          d.AQI = +d.AQI;
+          return d;
+          }, function(error, data) {
+            if (error) throw error;
+            var stateById = d3.map();
+            data.forEach(function(d) { stateById.set(d.mon, d); });
+            dispatch.call("load", this, stateById);
+            dispatch.call("statechange", this, stateById.get("2016-11"));
+
+            x.domain(data.map(function(d) { return d.mon; }));
+            y.domain([0, d3.max(data, function(d) { return d.AQI; })]);
+
+            g.append("g")
+                .attr("class", "axis axis--x")
+                .attr("transform", "translate(0," + height + ")")
+                .call(d3.axisBottom(x));
+
+            g.append("g")
+                .attr("class", "axis axis--y")
+                .call(d3.axisLeft(y).ticks(10))
+              .append("text")
+                .attr("transform", "rotate(-90)")
+                .attr("y", 6)
+                .attr("dy", "0.71em")
+                .attr("text-anchor", "end")
+                .text("AQI");
+
+            g.selectAll(".bar")
+              .data(data)
+              .enter().append("rect")
+              .attr("id", "rec")
+                .attr("class", "bar")
+                .attr("x", function(d) { return x(d.mon); })
+                .attr("y", function(d) { return y(d.AQI); })
+                .attr("width", x.bandwidth())
+                .attr("height", function(d) { return height - y(d.AQI); })
+              .style("fill",function(d,i) {if ((num==11 && i==0) || (num == 12 && i==1) || (num == 1 && i==2)) return "red"; else return "YellowGreen"})
+              .on("mouseover", function(d) {
+                d3.select(this).style("fill", "brown");
+              }) 
+              .on("mouseout", function(d) {
+                d3.select(this).style("fill", "YellowGreen");
+              })
+              .on ("click", function(d){
+              d3.select("#cir").html("");
+              d3.select("#line").html("");
+            
+            if (d.mon=="2016-11" && isNov ==0){
+              circle("Nov.json");
+              return linechart("Nov.csv");}
+            if (d.mon=="2016-11" && isNov ==1){
+            linechart("total.csv");
+            return circle("circledata.json");}
+            if (d.mon=="2016-12" && isDec ==0){
+            circle("Dec.json");
+              return linechart("Dec.csv");}
+            if (d.mon=="2016-12" && isDec ==1){
+            linechart("total.csv");
+            return circle("circledata.json");}
+            if (d.mon=="2017-01" && isJan ==0){
+            circle("Jan.json");
+              return linechart("Jan.csv");}
+            if (d.mon=="2017-01" && isJan ==1){
+            linechart("total.csv");
+            return circle("circledata.json");}
+            });
+        });
+      }
+      //line chart
+      function linechart(Data){
+          var svg3 = d3.select("#line"),
+              margin = {top: 20, right: 20, bottom: 30, left: 50},
+              width = +svg3.attr("width") - margin.left - margin.right,
+              height = +svg3.attr("height") - margin.top - margin.bottom,
+              g2 = svg3.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+              //g2.selectAll("*").remove();
+          var parseTime = d3.timeParse("%m/%e/%Y");
+
+          var x = d3.scaleTime()
+              .rangeRound([0, width]);
+
+          var y = d3.scaleLinear()
+              .rangeRound([height, 0]);
+
+          var line = d3.line()
+              .x(function(d) { return x(d.date); })
+              .y(function(d) { return y(d.pm); });
+
+          d3.csv(Data, function(d) {
+            d.date = parseTime(d.date);
+            d.pm = +d.pm;
+            
+            return d;
+          }, function(error, data) {
+            if (error) throw error;
+
+            x.domain(d3.extent(data, function(d) { return d.date; }));
+            y.domain(d3.extent(data, function(d) { return d.pm; }));
+
+            g2.append("g")
+                .attr("transform", "translate(0," + height + ")")
+                .call(d3.axisBottom(x))
+              .select(".domain")
+                .remove();
+
+            g2.append("g")
+                .call(d3.axisLeft(y))
+              .append("text")
+                .attr("fill", "#000")
+                .attr("transform", "rotate(-90)")
+                .attr("y", 6)
+                .attr("dy", "0.71em")
+                .attr("text-anchor", "end")
+                .text("PM 2.5");
+
+            g2.append("path")
+                .datum(data)
+                .attr("fill", "none")
+                .attr("stroke", "black")
+                .attr("stroke-linejoin", "round")
+                .attr("stroke-linecap", "round")
+                .attr("stroke-width", 1.5)
+                .attr("d", line);
+              
+            svg3.selectAll("dot")
+                  .data(data)
+                .enter().append("circle")
+                  .attr("r", 6)
+                  .attr("cx", function(d) { return x(d.date)+margin.left; })
+                  .attr("cy", function(d) { return y(d.pm)+margin.top; })
+              .attr("fill", "red")
+              .on("mouseover", function(d) {
+                d3.select(this).attr("r", 10).style("fill", "blue");
+              }) 
+              .on("mouseout", function(d) {
+                d3.select(this).attr("r", 6).style("fill", "red");
+              })
+              .on("click", function(d){
+              d3.select("#cir").html("");
+              d3.select("#bar").html("");
+              d3.select("#line").html("");
+              if (Data=="total.csv"){
+              var day1 = new Date(2016, 11, 1);
+              console.log(day1);
+              var day2 = new Date(2017, 0, 1);
+              console.log(day2);
+              var day3 = new Date(2017, 1, 1);
+              console.log(day3);
+              if (d.date<day1) {linechart("Nov.csv");bar(11);return circle("Nov.json");}
+              else if (d.date<day2){linechart("Dec.csv");bar(12);return circle("Dec.json");}
+              else if (d.date<day3){linechart("Jan.csv");bar(1);return circle("Jan.json");;}
+              
+              }
+              else{
+              linechart("total.csv");
+              circle("circledata.json");
+              bar("0");
+
+              }});
+              
+          });
+      }
+      // circle pack
+      function circle(Data){
+        if (Data=="circledata.json"){
+        isNov = 0;
+        isDec = 0;
+        isJan = 0;}
+        if (Data=="Nov.json"){
+        isNov = 1;
+        isDec = 0;
+        isJan = 0;
+        }
+        if (Data=="Dec.json"){
+        isNov = 0;
+        isDec = 1;
+        isJan = 0;
+        }
+        if (Data=="Jan.json"){
+        isNov = 0;
+        isDec = 0;
+        isJan = 1;
+        }
+        var svg2 = d3.select("#cir"),
+            diameter = +svg2.attr("width"),
+            g1 = svg2.append("g").attr("transform", "translate(2,2)"),
+            format = d3.format(",d");
+
+        var pack = d3.pack()
+            .size([diameter - 4, diameter - 4]);
+
+        d3.json(Data, function(error, root) {
+          if (error) throw error;
+          root = d3.hierarchy(root)
+              .sum(function(d) { return d.size; })
+              .sort(function(a, b) { return b.value - a.value; });
+
+          var node = g1.selectAll(".node")
+            .data(pack(root).descendants())
+            .enter().append("g")
+              .attr("class", function(d) { return d.children ? "node" : "leaf node"; })
+              .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+
+          node.append("title")
+              .text(function(d) { return d.data.name + "\n" + format(d.value/1000)+" day(s)"; });
+
+          node.append("circle")
+              .attr("r", function(d) { return d.r; })
+            .style("fill", function(d){if(d.data.name.localeCompare("good")==0) return "Pink";
+                        else if(d.data.name.localeCompare("fine")==0) return "LightPink";
+                        else if(d.data.name.localeCompare("slightly polluted")==0) return "HotPink";
+                        else if(d.data.name.localeCompare("median polluted")==0) return "PaleVioletRed";
+                        else if(d.data.name.localeCompare("highly polluted")==0) return "DeepPink";
+                        else if(d.data.name.localeCompare("heavily polluted")==0) return "MediumVioletRed";
+                        else if(d.data.name.localeCompare("air-condition")==0) return "Seashell";
+                        else return "MistyRose"; }
+                        )
+            .on("mouseover", function(d) {
+                d3.csv("11to1.csv", function(error, date) {
+                    if (error) throw error;
+                    var dates = d3.map();
+                    date.forEach(function(d){ dates.set(d.date, d);});
+                    // console.log(dates);
+                    console.log(isNov,isDec,isJan);
+                    dispatch.call("choose", this,d.data.name ,dates, isNov,isDec,isJan);
+                });
+            })
+            .on("click", function(d){
+            if (Data=="circledata.json"){
+            if (d.data.name.localeCompare("Nov-2016")==0) {
+            d3.select("#cir").html("");
+            d3.select("#bar").html("");
+            d3.select("#line").html("");linechart("Nov.csv");bar(11);return circle("Nov.json");}
+            if (d.data.name.localeCompare("Dec-2016")==0) {
+            d3.select("#cir").html("");
+            d3.select("#bar").html("");
+            d3.select("#line").html("");linechart("Nov.csv");bar(12);return circle("Dec.json");}
+            if (d.data.name.localeCompare("Jan-2017")==0) {
+            d3.select("#cir").html("");
+            d3.select("#bar").html("");
+            d3.select("#line").html("");linechart("Dec.csv");bar(1);return circle("Jan.json");}
+            }
+            else{
+            d3.select("#cir").html("");
+            d3.select("#bar").html("");
+            d3.select("#line").html("");
+            linechart("total.csv");
+            circle("circledata.json");
+            bar("0");
+            }});
+          node.filter(function(d) { return !d.children; }).append("text")
+              .attr("dy", "0.3em")
+              .text(function(d) { return d.data.name.substring(0, d.r / 3); });
+        });
+      }
+      // highlight function
+      dispatch.on("choose.level", function(name, dates, isNov,isDec,isJan) {
+              console.log(isNov,isDec,isJan);
+              var Data = "total.csv";
+              if (isNov == 0 && isDec == 0 && isJan == 0) {
+                  Data = "total.csv";
+              } else if (isNov == 1 && isDec == 0 && isJan == 0) {
+                  Data = "Nov.csv";
+              } else if (isNov == 0 && isDec == 1 && isJan == 0) {
+                  Data = "Dec.csv";
+              } else if (isNov == 0 && isDec == 0 && isJan == 1) {
+                  Data = "Jan.csv";
+              }
+              d3.select("#line").html("");
+              var svg3 = d3.select("#line"),
+                  margin = {top: 20, right: 20, bottom: 30, left: 50},
+                  width = +svg3.attr("width") - margin.left - margin.right,
+                  height = +svg3.attr("height") - margin.top - margin.bottom,
+                  g2 = svg3.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+                  //g2.selectAll("*").remove();
+              var parseTime = d3.timeParse("%m/%e/%Y");
+
+              var x = d3.scaleTime()
+                  .rangeRound([0, width]);
+
+              var y = d3.scaleLinear()
+                  .rangeRound([height, 0]);
+
+              var line = d3.line()
+                  .x(function(d) { return x(d.date); })
+                  .y(function(d) { return y(d.pm); });
+
+              d3.csv(Data, function(d) {
+                d.date = parseTime(d.date);
+                d.pm = +d.pm;
+                
+                return d;
+              }, function(error, data) {
+                if (error) throw error;
+
+                x.domain(d3.extent(data, function(d) { return d.date; }));
+                y.domain(d3.extent(data, function(d) { return d.pm; }));
+
+                g2.append("g")
+                    .attr("transform", "translate(0," + height + ")")
+                    .call(d3.axisBottom(x))
+                  .select(".domain")
+                    .remove();
+
+                g2.append("g")
+                    .call(d3.axisLeft(y))
+                  .append("text")
+                    .attr("fill", "#000")
+                    .attr("transform", "rotate(-90)")
+                    .attr("y", 6)
+                    .attr("dy", "0.71em")
+                    .attr("text-anchor", "end")
+                    .text("PM 2.5");
+
+                g2.append("path")
+                    .datum(data)
+                    .attr("fill", "none")
+                    .attr("stroke", "black")
+                    .attr("stroke-linejoin", "round")
+                    .attr("stroke-linecap", "round")
+                    .attr("stroke-width", 1.5)
+                    .attr("d", line);
+                  
+                svg3.selectAll("dot")
+                      .data(data)
+                    .enter().append("circle")
+                      .attr("r", 6)
+                      .attr("cx", function(d) { return x(d.date)+margin.left; })
+                      .attr("cy", function(d) { return y(d.pm)+margin.top; })
+                  .attr("fill", function(d) {
+                        if (d.level == name) {
+                            //return "DarkTurquoise";
+                            return "Aqua";
+                        } else {
+                            return "red";
+                        }
+                  })
+                  .on("mouseover", function(d) {
+                    d3.select(this).attr("r", 10).style("fill", "blue");
+                  }) 
+                  .on("mouseout", function(d) {
+                    d3.select(this).attr("r", 6).style("fill", "red");
+                  })
+                  .on("click", function(d){
+                  d3.select("#cir").html("");
+                  d3.select("#bar").html("");
+                  d3.select("#line").html("");
+                  if (Data=="total.csv"){
+                  var day1 = new Date(2016, 11, 1);
+                  console.log(day1);
+                  var day2 = new Date(2017, 0, 1);
+                  console.log(day2);
+                  var day3 = new Date(2017, 1, 1);
+                  console.log(day3);
+                  if (d.date<day1) {linechart("Nov.csv");bar(11);return circle("Nov.json");}
+                  else if (d.date<day2){linechart("Dec.csv");bar(12);return circle("Dec.json");}
+                  else if (d.date<day3){linechart("Jan.csv");bar(1);return circle("Jan.json");;}
+                  
+                  }
+                  else{
+                  linechart("total.csv");
+                  circle("circledata.json");
+                  bar("0");
+                  }});
+              });
+      })
+      dispatch.on("highlight.date", function(hdate) {
+          console.log(d3.select("#line").attr("dot"));
+          var svg3 = d3.select("#line").selectAll("dot").select("cx", function() {
+              console.log(this.value());
+          })
+      })
+      linechart("total.csv");
+      circle("circledata.json");
+      bar("0");
+
+</script>
+
+
