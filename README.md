@@ -1,7 +1,7 @@
-Assignment 4 - Visualizations and Multiple Views  <br>
-link: https://qiwang19.github.io/04-MapsAndViews/index.html 
-===
+Assignment 4 - Visualizations and Multiple Views  
 
+===
+link: https://qiwang19.github.io/04-MapsAndViews/index.html  <br>
 In your recent lab you made a choropleth map of drought data.
 Map visualization yields considerable challenges, however.
 Multiple dimensions are difficult to visualize in a map: the size of regions impacts color perception, and map projections can distort real distances in the world.
