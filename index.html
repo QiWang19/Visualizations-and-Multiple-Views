@@ -55,9 +55,14 @@ path {
 
 </style>
 <h1 align="center">Assignment 04-MapsAndViews - Yuchen Liu & Qi Wang</h1>
-<svg id = "bar" x="0" width="500" height="300"></svg>
+<p><strong>About</strong></p>
+<p>In China, air pollution is a severe problem. Smog hangs heavily over most cities in China, such as Beijing. As for residence, there are several statistics they really care about every day: <strong>AQI</strong> (Air Quality Index), <strong>Air quality level</strong>, and <strong>PM 2.5</strong> (particles with an aerodynamic diameter less than 2.5 μm). In this project, we visualize Beijing’s air quality in last three months: 2016-11, 2016-12 and 2017-01.</p>
+<p> </p>
+<p> </p>
+<svg id = "bar" x="0" width="500" height="400"></svg>
 <svg id = "cir" x="800" width="400" height="400"></svg>
-<svg id = "line" width="960" height="300"></svg>
+<svg id = "line" width="960" height="400"></svg>
+
 <script src="https://d3js.org/d3.v4.min.js"></script>
 <script>
       var dispatch = d3.dispatch("load", "statechange", "choose", "highlight");
@@ -67,7 +72,7 @@ path {
       //bar chart
       function bar(num){
         var svg1 = d3.select("#bar"),
-            margin = {top: 30, right: 30, bottom: 30, left: 60},
+            margin = {top: 50, right: 30, bottom: 30, left: 60},
             width = +svg1.attr("width") - margin.left - margin.right,
             height = +svg1.attr("height") - margin.top - margin.bottom;
 
@@ -76,6 +81,14 @@ path {
 
         var g = svg1.append("g")
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+		
+		svg1.append("text")
+        .attr("x", 40)             
+        .attr("y", 0 + (margin.top / 2))
+        .attr("text-anchor", "middle")  
+        .style("font-size", "16px") 
+        .style("text-decoration", "underline")  
+        .text("AQI Vis");
 
         var tooltip = d3.select("body").append("div").attr("class", "toolTip");
 
@@ -106,6 +119,16 @@ path {
                 .attr("dy", "0.71em")
                 .attr("text-anchor", "end")
                 .text("AQI");
+				
+			g.append("g")
+                    .call(d3.axisLeft(y))
+                  .append("text")
+                    .attr("fill", "#000")
+                    .attr("transform", "rotate(-90)")
+                    .attr("y", 6)
+                    .attr("dy", "0.71em")
+                    .attr("text-anchor", "end")
+                    .text("AQI");
 
             g.selectAll(".bar")
               .data(data)
@@ -123,11 +146,13 @@ path {
                         .style("top", d3.event.pageY - 70 + "px")
                         .style("display", "inline-block")
                         .html("AQI: "+ d.AQI);
-                  d3.select(this).style("fill", "DarkTurquoise");
+                  //d3.select(this).style("fill", "DarkTurquoise");
+				  d3.select(this).transition().duration(500).style("fill", "DarkTurquoise");
               }) 
               .on("mouseout", function(d) {
                   tooltip.style("display", "none");
-                  d3.select(this).style("fill", "PowderBlue");
+                  //d3.select(this).style("fill", "PowderBlue");
+				  d3.select(this).transition().duration(500).style("fill", "PowderBlue");
               })
               .on ("click", function(d){
               d3.select("#cir").html("");
@@ -157,12 +182,20 @@ path {
       //line chart
       function linechart(Data){
           var svg3 = d3.select("#line"),
-              margin = {top: 20, right: 20, bottom: 30, left: 50},
+              margin = {top: 80, right: 20, bottom: 30, left: 50},
               width = +svg3.attr("width") - margin.left - margin.right,
               height = +svg3.attr("height") - margin.top - margin.bottom,
               g2 = svg3.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
               //g2.selectAll("*").remove();
           var parseTime = d3.timeParse("%m/%e/%Y");
+		  
+		  svg3.append("text")
+        .attr("x", 50)             
+        .attr("y", (margin.top / 2))
+        .attr("text-anchor", "middle")  
+        .style("font-size", "16px") 
+        .style("text-decoration", "underline")  
+        .text("PM 2.5 Vis");
 
           var x = d3.scaleTime()
               .rangeRound([0, width]);
@@ -218,10 +251,10 @@ path {
                   .attr("cy", function(d) { return y(d.pm)+margin.top; })
               .attr("fill", "red")
               .on("mouseover", function(d) {
-                d3.select(this).attr("r", 10).style("fill", "blue");
+                d3.select(this).transition().duration(500).attr("r", 10).style("fill", "blue");
               }) 
               .on("mouseout", function(d) {
-                d3.select(this).attr("r", 6).style("fill", "red");
+                d3.select(this).transition().duration(500).attr("r", 6).style("fill", "red");
               })
               .on("click", function(d){
               d3.select("#cir").html("");
@@ -273,6 +306,14 @@ path {
             diameter = +svg2.attr("width"),
             g1 = svg2.append("g").attr("transform", "translate(2,2)"),
             format = d3.format(",d");
+			
+		svg2.append("text")
+        .attr("x", 40)             
+        .attr("y", 20)
+        .attr("text-anchor", "middle")  
+        .style("font-size", "16px") 
+        .style("text-decoration", "underline")  
+        .text("Level Vis");
 
         var pack = d3.pack()
             .size([diameter - 4, diameter - 4]);
@@ -356,11 +397,20 @@ path {
               }
               d3.select("#line").html("");
               var svg3 = d3.select("#line"),
-                  margin = {top: 20, right: 20, bottom: 30, left: 50},
                   width = +svg3.attr("width") - margin.left - margin.right,
                   height = +svg3.attr("height") - margin.top - margin.bottom,
                   g2 = svg3.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
                   //g2.selectAll("*").remove();
+			
+			 svg3.append("text")
+        .attr("x", 50)             
+        .attr("y", (margin.top / 2))
+        .attr("text-anchor", "middle")  
+        .style("font-size", "16px") 
+        .style("text-decoration", "underline")  
+        .text("PM 2.5 Vis");
+				  
+			
               var parseTime = d3.timeParse("%m/%e/%Y");
 
               var x = d3.scaleTime()
@@ -424,10 +474,10 @@ path {
                         }
                   })
                   .on("mouseover", function(d) {
-                    d3.select(this).attr("r", 10).style("fill", "blue");
+                    d3.select(this).transition().duration(500).attr("r", 10).style("fill", "blue");
                   }) 
                   .on("mouseout", function(d) {
-                    d3.select(this).attr("r", 6).style("fill", "red");
+                    d3.select(this).transition().duration(500).attr("r", 6).style("fill", "red");
                   })
                   .on("click", function(d){
                   d3.select("#cir").html("");
