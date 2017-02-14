@@ -5,7 +5,16 @@
 .bar {
 
 }
-
+.toolTip {
+  position: absolute;
+  display: none;
+  min-width: 80px;
+  height: auto;
+  background: none repeat scroll 0 0 ivory;
+  border: 1px solid lightgray;
+  padding: 5px;
+  text-align: center;
+}
 
 .axis--x path {
   display: none;
@@ -45,6 +54,7 @@ path {
 }
 
 </style>
+<h1 align="center">Assignment 04-MapsAndViews - Yuchen Liu & Qi Wang</h1>
 <svg id = "bar" x="0" width="500" height="300"></svg>
 <svg id = "cir" x="800" width="400" height="400"></svg>
 <svg id = "line" width="960" height="300"></svg>
@@ -66,6 +76,8 @@ path {
 
         var g = svg1.append("g")
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+        var tooltip = d3.select("body").append("div").attr("class", "toolTip");
 
         d3.csv("bardata.csv", function(d) {
           d.AQI = +d.AQI;
@@ -104,12 +116,18 @@ path {
                 .attr("y", function(d) { return y(d.AQI); })
                 .attr("width", x.bandwidth())
                 .attr("height", function(d) { return height - y(d.AQI); })
-              .style("fill",function(d,i) {if ((num==11 && i==0) || (num == 12 && i==1) || (num == 1 && i==2)) return "red"; else return "YellowGreen"})
+              .style("fill",function(d,i) {if ((num==11 && i==0) || (num == 12 && i==1) || (num == 1 && i==2)) return "Blue"; else return "PowderBlue"})
               .on("mouseover", function(d) {
-                d3.select(this).style("fill", "brown");
+                  tooltip
+                        .style("left", d3.event.pageX - 50 + "px")
+                        .style("top", d3.event.pageY - 70 + "px")
+                        .style("display", "inline-block")
+                        .html("AQI: "+ d.AQI);
+                  d3.select(this).style("fill", "DarkTurquoise");
               }) 
               .on("mouseout", function(d) {
-                d3.select(this).style("fill", "YellowGreen");
+                  tooltip.style("display", "none");
+                  d3.select(this).style("fill", "PowderBlue");
               })
               .on ("click", function(d){
               d3.select("#cir").html("");
