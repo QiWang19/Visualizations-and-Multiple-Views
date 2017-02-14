@@ -92,7 +92,7 @@ path {
 
         var tooltip = d3.select("body").append("div").attr("class", "toolTip");
 
-        d3.csv("bardata.csv", function(d) {
+        d3.csv("AirData/bardata.csv", function(d) {
           d.AQI = +d.AQI;
           return d;
           }, function(error, data) {
@@ -159,23 +159,23 @@ path {
               d3.select("#line").html("");
             
             if (d.mon=="2016-11" && isNov ==0){
-              circle("Nov.json");
-              return linechart("Nov.csv");}
+              circle("AirData/Nov.json");
+              return linechart("AirData/Nov.csv");}
             if (d.mon=="2016-11" && isNov ==1){
-            linechart("total.csv");
-            return circle("circledata.json");}
+            linechart("AirData/total.csv");
+            return circle("AirData/circledata.json");}
             if (d.mon=="2016-12" && isDec ==0){
-            circle("Dec.json");
-              return linechart("Dec.csv");}
+            circle("AirData/Dec.json");
+              return linechart("AirData/Dec.csv");}
             if (d.mon=="2016-12" && isDec ==1){
-            linechart("total.csv");
-            return circle("circledata.json");}
+            linechart("AirData/total.csv");
+            return circle("AirData/circledata.json");}
             if (d.mon=="2017-01" && isJan ==0){
-            circle("Jan.json");
-              return linechart("Jan.csv");}
+            circle("AirData/Jan.json");
+              return linechart("AirData/Jan.csv");}
             if (d.mon=="2017-01" && isJan ==1){
-            linechart("total.csv");
-            return circle("circledata.json");}
+            linechart("AirData/total.csv");
+            return circle("AirData/circledata.json");}
             });
         });
       }
@@ -260,21 +260,21 @@ path {
               d3.select("#cir").html("");
               d3.select("#bar").html("");
               d3.select("#line").html("");
-              if (Data=="total.csv"){
+              if (Data=="AirData/total.csv"){
               var day1 = new Date(2016, 11, 1);
               console.log(day1);
               var day2 = new Date(2017, 0, 1);
               console.log(day2);
               var day3 = new Date(2017, 1, 1);
               console.log(day3);
-              if (d.date<day1) {linechart("Nov.csv");bar(11);return circle("Nov.json");}
-              else if (d.date<day2){linechart("Dec.csv");bar(12);return circle("Dec.json");}
-              else if (d.date<day3){linechart("Jan.csv");bar(1);return circle("Jan.json");;}
+              if (d.date<day1) {linechart("AirData/Nov.csv");bar(11);return circle("AirData/Nov.json");}
+              else if (d.date<day2){linechart("AirData/Dec.csv");bar(12);return circle("AirData/Dec.json");}
+              else if (d.date<day3){linechart("AirData/Jan.csv");bar(1);return circle("AirData/Jan.json");;}
               
               }
               else{
-              linechart("total.csv");
-              circle("circledata.json");
+              linechart("AirData/total.csv");
+              circle("AirData/circledata.json");
               bar("0");
 
               }});
@@ -283,21 +283,21 @@ path {
       }
       // circle pack
       function circle(Data){
-        if (Data=="circledata.json"){
+        if (Data=="AirData/circledata.json"){
         isNov = 0;
         isDec = 0;
         isJan = 0;}
-        if (Data=="Nov.json"){
+        if (Data=="AirData/Nov.json"){
         isNov = 1;
         isDec = 0;
         isJan = 0;
         }
-        if (Data=="Dec.json"){
+        if (Data=="AirData/Dec.json"){
         isNov = 0;
         isDec = 1;
         isJan = 0;
         }
-        if (Data=="Jan.json"){
+        if (Data=="AirData/Jan.json"){
         isNov = 0;
         isDec = 0;
         isJan = 1;
@@ -345,7 +345,7 @@ path {
                         else return "MistyRose"; }
                         )
             .on("mouseover", function(d) {
-                d3.csv("11to1.csv", function(error, date) {
+                d3.csv("AirData/11to1.csv", function(error, date) {
                     if (error) throw error;
                     var dates = d3.map();
                     date.forEach(function(d){ dates.set(d.date, d);});
@@ -355,26 +355,26 @@ path {
                 });
             })
             .on("click", function(d){
-            if (Data=="circledata.json"){
+            if (Data=="AirData/circledata.json"){
             if (d.data.name.localeCompare("Nov-2016")==0) {
             d3.select("#cir").html("");
             d3.select("#bar").html("");
-            d3.select("#line").html("");linechart("Nov.csv");bar(11);return circle("Nov.json");}
+            d3.select("#line").html("");linechart("AirData/Nov.csv");bar(11);return circle("AirData/Nov.json");}
             if (d.data.name.localeCompare("Dec-2016")==0) {
             d3.select("#cir").html("");
             d3.select("#bar").html("");
-            d3.select("#line").html("");linechart("Dec.csv");bar(12);return circle("Dec.json");}
+            d3.select("#line").html("");linechart("AirData/Dec.csv");bar(12);return circle("AirData/Dec.json");}
             if (d.data.name.localeCompare("Jan-2017")==0) {
             d3.select("#cir").html("");
             d3.select("#bar").html("");
-            d3.select("#line").html("");linechart("Jan.csv");bar(1);return circle("Jan.json");}
+            d3.select("#line").html("");linechart("AirData/Jan.csv");bar(1);return circle("AirData/Jan.json");}
             }
             else{
             d3.select("#cir").html("");
             d3.select("#bar").html("");
             d3.select("#line").html("");
-            linechart("total.csv");
-            circle("circledata.json");
+            linechart("AirData/total.csv");
+            circle("AirData/circledata.json");
             bar("0");
             }});
           node.filter(function(d) { return !d.children; }).append("text")
@@ -385,15 +385,15 @@ path {
       // highlight function
       dispatch.on("choose.level", function(name, dates, isNov,isDec,isJan) {
               console.log(isNov,isDec,isJan);
-              var Data = "total.csv";
+              var Data = "AirData/total.csv";
               if (isNov == 0 && isDec == 0 && isJan == 0) {
-                  Data = "total.csv";
+                  Data = "AirData/total.csv";
               } else if (isNov == 1 && isDec == 0 && isJan == 0) {
-                  Data = "Nov.csv";
+                  Data = "AirData/Nov.csv";
               } else if (isNov == 0 && isDec == 1 && isJan == 0) {
-                  Data = "Dec.csv";
+                  Data = "AirData/Dec.csv";
               } else if (isNov == 0 && isDec == 0 && isJan == 1) {
-                  Data = "Jan.csv";
+                  Data = "AirData/Jan.csv";
               }
               d3.select("#line").html("");
               var svg3 = d3.select("#line"),
@@ -484,21 +484,21 @@ path {
                   d3.select("#cir").html("");
                   d3.select("#bar").html("");
                   d3.select("#line").html("");
-                  if (Data=="total.csv"){
+                  if (Data=="AirData/total.csv"){
                   var day1 = new Date(2016, 11, 1);
                   console.log(day1);
                   var day2 = new Date(2017, 0, 1);
                   console.log(day2);
                   var day3 = new Date(2017, 1, 1);
                   console.log(day3);
-                  if (d.date<day1) {linechart("Nov.csv");bar(11);return circle("Nov.json");}
-                  else if (d.date<day2){linechart("Dec.csv");bar(12);return circle("Dec.json");}
-                  else if (d.date<day3){linechart("Jan.csv");bar(1);return circle("Jan.json");;}
+                  if (d.date<day1) {linechart("AirData/Nov.csv");bar(11);return circle("AirData/Nov.json");}
+                  else if (d.date<day2){linechart("AirData/Dec.csv");bar(12);return circle("AirData/Dec.json");}
+                  else if (d.date<day3){linechart("AirData/Jan.csv");bar(1);return circle("AirData/Jan.json");;}
                   
                   }
                   else{
-                  linechart("total.csv");
-                  circle("circledata.json");
+                  linechart("AirData/total.csv");
+                  circle("AirData/circledata.json");
                   bar("0");
                   }});
               });
@@ -509,8 +509,8 @@ path {
               console.log(this.value());
           })
       })
-      linechart("total.csv");
-      circle("circledata.json");
+      linechart("AirData/total.csv");
+      circle("AirData/circledata.json");
       bar("0");
 </script>
 
