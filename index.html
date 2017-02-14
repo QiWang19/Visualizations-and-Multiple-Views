@@ -397,6 +397,7 @@ path {
               }
               d3.select("#line").html("");
               var svg3 = d3.select("#line"),
+                  margin = {top: 80, right: 20, bottom: 30, left: 50},
                   width = +svg3.attr("width") - margin.left - margin.right,
                   height = +svg3.attr("height") - margin.top - margin.bottom,
                   g2 = svg3.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
