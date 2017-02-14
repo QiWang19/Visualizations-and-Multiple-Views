@@ -1,95 +1,42 @@
-Assignment 4 - Visualizations and Multiple Views  
-===
+## Assignment 4 - Visualizations and Multiple Views  
+
+#Working Link
 link: https://qiwang19.github.io/04-MapsAndViews/index.html  <br>
-In your recent lab you made a choropleth map of drought data.
-Map visualization yields considerable challenges, however.
-Multiple dimensions are difficult to visualize in a map: the size of regions impacts color perception, and map projections can distort real distances in the world.
+  
+## About
+In China, air pollution is a severe problem. Smog hangs heavily over most cities in China, such as Beijing. As for residence, there are several statistics they really care about every day: AQI (Air Quality Index), air quality level, and PM 2.5 (particles with an aerodynamic diameter less than 2.5 μm). In this project, we visualize Beijing’s air quality in last three months: 2016-11, 2016-12 and 2017-01.  
 
-One of the most powerful techniques for mitigating the shortcomings of a given visualization is to link it with other views.
-Linking a map to a bar or scatterplot, for instance, may allow you to overcome the shortcomings of a map.
-In general, linking visualizations allows you to explore different parts of the data between views, and mitigates the shortcomings of a given view by pairing it with other views.
-This technique, called coordinated multiple views, is the focus of this assignment.
-
-Your task is to choose an interesting dataset and visualize it in *at least three* **linked** views.
-Each view should use a different visualization type, and interaction in one of the views should impact what's shown in the other views.
-
-_Due to popular request, you're not required to use a map. See the resources section for interesting datasets, but be sure to look for your own interesting data._
-
-You should choose data and visualizations that are sufficiently complex so a user can discover interesting patterns and trends on their own.
-
-For this assignment you should write everything from scratch.
-You may *reference* demo programs from books or the web, and if you do please provide a References section with links at the end of your Readme.
-
-Teams
----
-
-You can have choose to have (1) teammate.
-If you choose to do so, give a one sentence description of what each teammate contributed to the most.
-
-Resources
----
-
-Stanford recently released a set of [interesting datasets](http://cjlab.stanford.edu/2015/09/30/lab-launch-and-data-sets/).
-
-Chris Viau maintains a [huge list of d3 examples](http://christopheviau.com/d3list/gallery.html), some will have multiple views.
-
-These three examples are intended to show you what multiple views visualizations might look like. 
-I wouldn't recommend using them as a your starting point, but you may find some inspiration:
-
-1. This [scatterplot matrix](http://bl.ocks.org/mbostock/4063663) has code that explains brushing and linking. But remember you'll be doing this with different types of views.
-
-2. The example visualization for [Crossfilter](http://square.github.io/crossfilter/) uses coordinated multiple views. The interaction and brushing technique is well-executed.
-
-3. The [dispatching events](http://bl.ocks.org/mbostock/5872848) page is a good example of using events, rather than explicit functions, for controlling behavior. Views can listen for events in other views and respond accordingly.
-
-This GIF from a similar course shows how views can work together:
-
-![cmv gif](https://raw.githubusercontent.com/dataviscourse/2015-dataviscourse-homework/master/hw3/preview.gif)
-
-The main [d3 api](https://github.com/mbostock/d3/wiki/API-Reference) and especially the [d3 dispatch page](https://github.com/mbostock/d3/wiki/Internals#events) will be useful.
-
-*If you aren't familiar with event-based programming you should experiment with d3.dispatch and other approaches to coordinating views well before the deadline (it's tricky.)*
-
-Don't forget to run a local webserver when you're coding and debugging.
-See this [ebook](http://chimera.labs.oreilly.com/books/1230000000345/ch04.html#_setting_up_a_web_server) if you're stuck.
-
-Requirements
----
-
-0. Your code should be forked from the GitHub repo and linked using GitHub pages.
-1. Your project should load a dataset you found on the web. Put this file in your repo.
-2. Your project should use d3 to build a visualization of the dataset. 
-3. Your writeup (readme.md in the repo) should contain the following:
-
-- Working link to the visualization hosted on gh-pages.
-- Concise description and screenshot of your visualization.
-- Description of the technical achievements you attempted with this visualization.
-- Description of the design achievements you attempted with this visualization.
-
-GitHub Details
----
-
-- Fork the [GitHub Repository](https://github.com/cs582-17s/04-MapsAndViews). You now have a copy associated with your username.
-- Make changes to index.html to fulfill the project requirements. 
-- Make sure your "master" branch matches your "gh-pages" branch. See the GitHub Guides referenced above if you need help.
-- Edit the README.md with a link to your gh-pages site: http://YourUsernameGoesHere.github.io/04-MapsAndViews/index.html
-- To submit, make a [Pull Request](https://help.github.com/articles/using-pull-requests/) on the original repository.
-
-Grading
----
-
-Grades on a 120 point scale 80 points will be graded for functionality: the program does what the assignment requests. 
-20 points will be based on documentation in the README. 
-
-I will use Google Chrome to view submissions. Be sure to test your code there.
-
-Total -- 120
-
-(0 will be assigned if the code won't run.)
-
-80 -- Dataset loads and visualization works with no obvious bugs or design flaws  
-
-20 -- README
-
-10 -- Description of technical achievements    
-10 -- Description of design achievements  
+##General View  
+![](img/1.png)
+First bar chart visualize the average AQI (can indicate the air quality for a specific month) for each month.  
+![](img/2.png)
+  
+Second circle packing visualize the number of days in different air quality level for each month, the size of circle is mapped to the number of day.  
+![](img/3.png) 
+  
+Third line chart visualize the PM 2.5 for each day in each month.  
+![](img/4.png)
+  
+##Interaction
+Bar chart: User can see AQI for each month by moving mouse on the corresponding bar. User can choose a specific month by clicking the corresponding bar. After clicking it, the circle pack and line chart will display the statistics in that month. User can go back to the general view by clicking that bar again or choosing another bar to see a different month’s statistics.   
+![](img/5.png)  
+  
+Circle packing: User can mouse over the circle to see the month and its corresponding information. For example, “Good 8 days” or “Dec-2016 31 days”. In the general view, user can click the circle to zoom into a specific month, the line chart will also zoom into that month, and the corresponding bar in the bar chart will be marked in dark blue. If user mouse over the circle for air quality level (good, fine, etc.), the date (indicated by dot in line chart) in that air quality level will be marked in green in line chart. After that, user can go back to general view by clicking the circle for that month again.  
+![](img/6.png)  
+  
+Line chart: User can click the dot (date) on the line chart to zoom into the corresponding month, the circle packing will also change to that month and  the corresponding bar will be marked with dark blue. After that, user can click any dot to go back to the general view and perform other operations.  
+![](img/7.png)  
+  
+##Technical achievement 
+Learn how to visualize the information in different views.  
+  
+Learn all to draw some new kinds of chart in D3, for example, circle packing.   
+  
+Learn how to add interactions between different views. In this project, we try different way to add interactions: for some interactions, we use D3 “.on” functions, for other interactions, we use “dispatch”.   
+  
+##Design achievement
+Choosing different charts according to different attributes we want to visualize. Instead of using the pie chart, using the proportion of the surface covered by the circles in circle pack to visualize the air level.  
+  
+The line chart is better to show the change of PM2.5 during a long time than other two charts.  
+  
+We carefully choose the color, for example, in the line chart, the original dot is red, and the date for a specific level is marked in green, we utilized the contrasting color. Also we used order and category color map in the circle pack. The number of colors is smaller than 12. It is effective because only around 12 bins of color can be distinguished in the human view.  
