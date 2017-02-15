@@ -1,4 +1,4 @@
-# Assignment 4 - Visualizations and Multiple Views  
+# Assignment 4 - Visualizations and Multiple Views-Yuchen Liu & Qi Wang  
 
 ##Working Link
 link: https://qiwang19.github.io/04-MapsAndViews/index.html  <br>
@@ -26,6 +26,9 @@ Circle packing: User can mouse over the circle to see the month and its correspo
   
 Line chart: User can click the dot (date) on the line chart to zoom into the corresponding month, the circle packing will also change to that month and  the corresponding bar will be marked with dark blue. After that, user can click any dot to go back to the general view and perform other operations.  
 ![](img/7.png)  
+
+##Team  
+As for interaction, Yuchen firstly took charge of "on" functions, Qi firstly took charge of "dispatch" functions, after that, the team switched the responsibility to optimize the other part's code.  
   
 ##Technical achievement 
 Learn how to visualize the information in different views.  
